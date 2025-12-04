@@ -65,6 +65,11 @@ inf_data_struct i (c, m) = (co, mo) : inf_data_struct i (co, mo)
 			where
 				(co, mo) = solve' i m (c, m)
 
+eyeball_a_solution :: [(Int, Grid)] -> Int
+eyeball_a_solution (x:y:xs)
+	| fst x == fst y = fst x
+	| otherwise = eyeball_a_solution (y:xs)
+
 main = do
 	i <- fmap (enumerate2D . words) $ readFile "input.txt"
 	m <- pure $ makeGrid i M.empty
@@ -72,4 +77,4 @@ main = do
 	-- print $ m
 	print $ solve i m
 	-- DO NOT ACTUALLY DO THIS, THIS IS JUST ME EYEBALLING A SOLUTION
-	print $ take 80 [fst x | x <- inf_data_struct i (0, m)]
+	print $ eyeball_a_solution . inf_data_struct i $ (0, m)
